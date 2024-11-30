@@ -1,0 +1,22 @@
+{
+  "name": "com.kwanjoong.textmeshpromax",
+  "version": "0.0.1",
+  "displayName": "Text Mesh Pro Max",
+  "description": "The ultimate Text Mesh Pro helper package.",
+  "unity": "2022.3",
+  "keywords": [
+    "Text Mesh Pro",
+    "TextMeshPro",
+    "Text Mesh Pro Max",
+    "TMP"
+  ],
+  "author": {
+    "name": "Kwanjoong Lee",
+    "url": "https://github.com/kwan3854"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kwan3854/TextMeshProMax.git"
+  },
+  "license": "MIT"
+}
