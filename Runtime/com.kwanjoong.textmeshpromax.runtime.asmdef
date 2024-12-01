@@ -11,6 +11,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "jp.netsis.rubytmp",
+            "expression": "",
+            "define": "RUBY_TEXT_SUPPORT"
+        }
+    ],
     "noEngineReferences": false
 }
