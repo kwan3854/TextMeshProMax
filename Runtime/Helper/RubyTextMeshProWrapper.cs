@@ -2,9 +2,9 @@
 using TMPro;
 using UnityEngine;
 
-namespace Runtime.Helper
+namespace TextMeshProMax.Runtime.Helper
 {
-    public class RubyTextMeshProWrapper : ITMPTextBase
+    internal class RubyTextMeshProWrapper : ITMPTextBase
     {
         private TMP_Text _rubyText;
 

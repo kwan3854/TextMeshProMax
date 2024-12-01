@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Runtime.Helper
+namespace TextMeshProMax.Runtime.Helper
 {
     /// <summary>
     /// Contains information about the Rect values of a specific string.

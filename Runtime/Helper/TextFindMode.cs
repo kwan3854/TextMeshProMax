@@ -1,4 +1,4 @@
-﻿namespace Runtime.Helper
+﻿namespace TextMeshProMax.Runtime.Helper
 {
     /// <summary>
     /// Specifies the mode for finding the string in the text.

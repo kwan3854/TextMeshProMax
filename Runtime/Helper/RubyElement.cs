@@ -1,11 +1,11 @@
 ﻿#if RUBY_TEXT_SUPPORT
-namespace Runtime.Helper
+namespace TextMeshProMax.Runtime.Helper
 {
     public struct RubyElement
     {
-        public string Ruby { get; private set; }
-        public string Body { get; private set; }
-        public bool IsPlainText { get; private set; }
+        public string Ruby { get; }
+        public string Body { get; }
+        public bool IsPlainText { get; }
 
         public RubyElement(string body, string ruby = null)
         {

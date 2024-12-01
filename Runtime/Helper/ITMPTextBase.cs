@@ -1,9 +1,9 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Runtime.Helper
+namespace TextMeshProMax.Runtime.Helper
 {
-    public interface ITMPTextBase
+    internal interface ITMPTextBase
     {
         TMP_TextInfo TextInfo { get; }
         Transform Transform { get; }
