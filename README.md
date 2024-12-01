@@ -5,8 +5,27 @@
 ------
 
 ## Table of Contents
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+Details
+
+- [**Features**](#features)
+  - [**1. GetStringRects**](#1-getstringrects)
+    - [**Parameters**](#parameters)
+    - [**Returns**](#returns)
+  - [**2. GetRubyStringRects *(Requires RubyTextMeshPro)***](#2-getrubystringrects-requires-rubytextmeshpro)
+    - [**Parameters**](#parameters-1)
+    - [**Returns**](#returns-1)
+  - [**3. Multi-Line Support**](#3-multi-line-support)
+    - [Example:](#example)
+- [**Example Usage**](#example-usage)
+  - [**Standard TMP_Text Example**](#standard-tmp_text-example)
+  - [**RubyTextMeshPro Example**](#rubytextmeshpro-example)
+- [**Contributing**](#contributing)
+  - [**Requesting New Features**](#requesting-new-features)
+- [**License**](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## **Features**
 
