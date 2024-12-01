@@ -143,15 +143,27 @@ public class TMPExample : MonoBehaviour
 }
 ```
 
+```csharp
+// Works on any tmp: TMP_Text, TextMeshPro, TextMeshProUGUI
+TMP_Text text;
+TextMeshPro text;
+TextMeshProUGUI text;
+
+text.text = "Hello World\nHello Universe";
+var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
+```
+
+
+
 ------
 
 ### **RubyTextMeshPro Example**
 
 > [!NOTE]
-> Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
+> Requires [RubyTextMeshPro](https://github.com/jp-netsis/RubyTextMeshPro)
 
 > [!TIP]
-> RubyText-specific features require the **RubyTextMeshProUGUI** package, while all other features of this library work independently of whether RubyTextMeshPro is installed.
+> RubyText-specific features require the **RubyTextMeshPro** package, while all other features of this library work independently of whether RubyTextMeshPro is installed.
 
 ```csharp
 using Runtime.Helper;
@@ -194,7 +206,14 @@ public class RubyTMPExample : MonoBehaviour
 }
 ```
 
+```csharp
+// Works on both RubyTextMeshPro(3D text) and RubyTextMeshProUGUI(2D UI text)
+RubyTextMeshProUGUI text;
+RubyTextMeshPro text;
 
+text.uneditedText = "<r=domo>Hello</r> <r=sekai>World</r> This is normal text!";
+var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
+```
 
 ------
 
