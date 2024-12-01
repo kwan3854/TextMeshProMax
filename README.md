@@ -35,7 +35,7 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
 
 #### **Parameters**
 
-- `text` (`TMP_Text`): The target TextMesh Pro object.
+- `text` (`TMP_Text` or `TextMeshProUGUI` or `TextMeshPro`): The target TextMesh Pro object.
 - `targetString` (`string`): The string you want to locate in the text.
 - `findMode`(`TextFindMode`):
   - `TextFindMode.First`: Returns the first occurrence of the string.
@@ -52,7 +52,7 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
 ### **2. GetRubyStringRects *(Requires RubyTextMeshPro)***
 
 > [!WARNING]
-> Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
+> Requires [RubyTextMeshPro](https://github.com/jp-netsis/RubyTextMeshPro)
 
 > [!NOTE]
 > RubyText-specific features require the **RubyTextMeshProUGUI** package, while all other features of this library work independently of whether RubyTextMeshPro is installed.
@@ -61,7 +61,7 @@ Retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTe
 
 #### **Parameters**
 
-- `rubyText` (`RubyTextMeshProUGUI`): The target RubyTextMeshProUGUI object.
+- `rubyText` (`RubyTextMeshProUGUI` or `RubyTextMeshPro`): The target RubyTextMeshProUGUI object.
 - `rubyString` (`RubyString`): A collection of `RubyElement` entries combining Ruby, body, and plain text.
 - `findMode`(`TextFindMode`):
   - `TextFindMode.First`: Returns the first occurrence of the Ruby string.
