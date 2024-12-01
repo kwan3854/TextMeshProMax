@@ -28,12 +28,10 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
 
 ### **2. GetRubyStringRects *(Requires RubyTextMeshPro)***
 
-[!WARNING]
+> [!WARNING]
+> Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
 
->  Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
-
-[!NOTE]
-
+> [!NOTE]
 > RubyText-specific features require the **RubyTextMeshProUGUI** package, while all other features of this library work independently of whether RubyTextMeshPro is installed.
 
 Retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTextMeshProUGUI` object. The Ruby string consists of multiple `RubyElement` entries, which can include Ruby text, body text, and plain text.
@@ -58,8 +56,7 @@ Retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTe
 
 The library can calculate `Rect` values for text that spans multiple lines. Whether the line breaks are due to manual newlines (`\n`) or automatic text wrapping applied by TextMesh Pro, the library handles them seamlessly.
 
-[!TIP]
-
+> [!TIP]
 > If the target string crosses line boundaries, the library automatically splits the result into one `Rect` per line, regardless of whether the line break was introduced manually or by automatic word wrapping.
 
 #### Example:
@@ -127,12 +124,10 @@ public class TMPExample : MonoBehaviour
 
 ### **RubyTextMeshPro Example**
 
-[!NOTE]
+> [!NOTE]
+> Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
 
->  Requires [RubyTextMeshProUGUI](https://github.com/jp-netsis/RubyTextMeshPro)
-
-[!TIP]
-
+> [!TIP]
 > RubyText-specific features require the **RubyTextMeshProUGUI** package, while all other features of this library work independently of whether RubyTextMeshPro is installed.
 
 ```csharp
