@@ -6,9 +6,9 @@ namespace Runtime.Helper
 {
     public class RubyTextMeshProWrapper : ITMPTextBase
     {
-        private RubyTextMeshProUGUI _rubyText;
+        private TMP_Text _rubyText;
 
-        public RubyTextMeshProWrapper(RubyTextMeshProUGUI rubyText) => _rubyText = rubyText;
+        public RubyTextMeshProWrapper(TMP_Text rubyText) => _rubyText = rubyText;
         public TMP_TextInfo TextInfo => _rubyText.textInfo;
         public Transform Transform => _rubyText.transform;
         public void ForceMeshUpdate() => _rubyText.ForceMeshUpdate();
