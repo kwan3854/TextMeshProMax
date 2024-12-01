@@ -4,6 +4,10 @@
 
 ------
 
+## Table of Contents
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ## **Features**
 
 ### **1. GetStringRects**
