@@ -27,13 +27,22 @@ Details
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## **Features**
+## How to Install
 
-### **1. GetStringRects**
+1. Open package manager from **Unity Editor**
+   - `Widnow` -> `Package Manager` -> `+` button on top left -> `Add package from git URL` 
+2. Copy paste this url
+   - ```https://github.com/kwan3854/TextMeshProMax.git```
+   - If you need specific version, you can specify like this ```https://github.com/kwan3854/TextMeshProMax.git#v0.2.0```
+
+
+## Features
+
+### 1. GetStringRects
 
 Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` object. This function supports multi-line text and overlapping cases, providing precise `Rect` data for all occurrences of the target string.
 
-#### **Parameters**
+#### Parameters
 
 - `text` (`TMP_Text` or `TextMeshProUGUI` or `TextMeshPro`): The target TextMesh Pro object.
 - `targetString` (`string`): The string you want to locate in the text.
@@ -41,15 +50,32 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
   - `TextFindMode.First`: Returns the first occurrence of the string.
   - `TextFindMode.All`: Returns all occurrences of the string.
 
-#### **Returns**
+#### Returns
 
 - A list of`TextRectInfo` objects, each containing:
   - `Rects`: A list of `Rect` objects representing the coordinates of the string.
   - `TargetString`: The string corresponding to the `Rect`.
 
+### 1.1 TryGetStringRects
+
+Attempt to retrieve the **Rect information** for specific strings rendered by a `TMP_Text` object. Returns `true` if successful, `false` otherwise.
+
+#### Parameters
+
+- `text` (`TMP_Text` or `TextMeshProUGUI` or `TextMeshPro`): The target TextMesh Pro object.
+- `targetString` (`string`): The string you want to locate in the text.
+- `findMode`(`TextFindMode`):
+  - `TextFindMode.First`: Returns the first occurrence of the string.
+  - `TextFindMode.All`: Returns all occurrences of the string.
+- `out results` (`List<TextRectInfo>`): The list to store the resulting `TextRectInfo` objects.
+
+#### Returns
+
+- `bool`: `true` if successful, `false` otherwise.
+
 ------
 
-### **2. GetRubyStringRects *(Requires RubyTextMeshPro)***
+### 2. GetRubyStringRects *(Requires RubyTextMeshPro)*
 
 > [!WARNING]
 > Requires [RubyTextMeshPro](https://github.com/jp-netsis/RubyTextMeshPro)
@@ -59,7 +85,7 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
 
 Retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTextMeshProUGUI` object. The Ruby string consists of multiple `RubyElement` entries, which can include Ruby text, body text, and plain text.
 
-#### **Parameters**
+#### Parameters
 
 - `rubyText` (`RubyTextMeshProUGUI` or `RubyTextMeshPro`): The target RubyTextMeshProUGUI object.
 - `rubyString` (`RubyString`): A collection of `RubyElement` entries combining Ruby, body, and plain text.
@@ -67,15 +93,31 @@ Retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTe
   - `TextFindMode.First`: Returns the first occurrence of the Ruby string.
   - `TextFindMode.All`: Returns all occurrences of the Ruby string.
 
-#### **Returns**
+#### Returns
 
 - A list of `TextRectInfo`objects, each containing:
   - `Rects`: A list of `Rect` objects for the string or line.
   - `TargetString`: The concatenated plain text of the Ruby string.
 
+### 2.1 TryGetRubyStringRects *(Requires RubyTextMeshPro)*
+
+Attempt to retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTextMeshProUGUI` object. Returns `true` if successful, `false` otherwise.
+
+#### Parameters
+
+- `rubyText` (`RubyTextMeshProUGUI` or `RubyTextMeshPro`): The target RubyTextMeshProUGUI object.
+- `rubyString` (`RubyString`): A collection of `RubyElement` entries combining Ruby, body, and plain text.
+- `findMode`(`TextFindMode`):
+  - `TextFindMode.First`: Returns the first occurrence of the Ruby string.
+  - `TextFindMode.All`: Returns all occurrences of the Ruby string.
+- `out results` (`List<TextRectInfo>`): The list to store the resulting `TextRectInfo` objects.
+
+#### Returns
+
+- `bool`: `true` if successful, `false` otherwise.
 ------
 
-### **3. Multi-Line Support**
+### 3. Multi-Line Support
 
 The library can calculate `Rect` values for text that spans multiple lines. Whether the line breaks are due to manual newlines (`\n`) or automatic text wrapping applied by TextMesh Pro, the library handles them seamlessly.
 
@@ -110,9 +152,9 @@ If the target string is `"Hello very long text that wraps!"`, the result will in
 
 ------
 
-## **Example Usage**
+## Example Usage
 
-### **Standard TMP_Text Example**
+### Standard TMP_Text Example
 
 ```csharp
 using Runtime.Helper;
@@ -157,7 +199,7 @@ var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
 
 ------
 
-### **RubyTextMeshPro Example**
+### RubyTextMeshPro Example
 
 > [!NOTE]
 > Requires [RubyTextMeshPro](https://github.com/jp-netsis/RubyTextMeshPro)
@@ -217,16 +259,16 @@ var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
 
 ------
 
-## **Contributing**
+## Contributing
 
 We welcome contributions to this project. If you have ideas for new features or improvements, feel free to open an issue or submit a pull request.
 
-### **Requesting New Features**
+### Requesting New Features
 
 If you want to request a new feature or report a bug, please visit the [Issues](https://github.com/kwan3854/TextMeshProMax/issues) page of the repository and create a new issue. Make sure to provide a detailed description of your request or problem to help us address it effectively.
 
 ------
 
-## **License**
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
