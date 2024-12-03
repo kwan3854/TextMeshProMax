@@ -192,7 +192,7 @@ TextMeshPro text;
 TextMeshProUGUI text;
 
 text.text = "Hello World\nHello Universe";
-var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
+var rects = text.GetStringRects(rubyString, TextFindMode.All);
 ```
 
 
