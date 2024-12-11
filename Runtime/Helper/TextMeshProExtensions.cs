@@ -9,6 +9,78 @@ namespace TextMeshProMax.Runtime.Helper
     public static class TextMeshProExtensions
     {
         /// <summary>
+        /// Attempts to retrieve the Rect information for a specific string within a TMP_Text object.
+        /// </summary>
+        /// <param name="text">The target TMP_Text object.</param>
+        /// <param name="targetString">The string to find within the text.</param>
+        /// <param name="findMode">
+        /// The mode to find the string (first occurrence, all occurrences, etc.):
+        /// <list type="bullet">
+        /// <item>
+        /// <description>TextFindMode.First: Returns a list containing the Rect values for the first occurrence of the specified string.</description>
+        /// </item>
+        /// <item>
+        /// <description>TextFindMode.All: Returns a list containing the Rect values for all occurrences of the specified string.</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="results">The output list of TextRectInfo containing the Rect values for the specified string.</param>
+        /// <returns>True if the string was found and Rect information was retrieved; otherwise, false.</returns>
+        public static bool TryGetStringRects(this TMP_Text text, string targetString, TextFindMode findMode,
+            out List<TextRectInfo> results)
+        {
+            return TryGetStringRectsInternal(new TMPTextWrapper(text), targetString, findMode, out results);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the Rect information for a specific string within a TextMeshPro object.
+        /// </summary>
+        /// <param name="text">The target TextMeshPro object.</param>
+        /// <param name="targetString">The string to find within the text.</param>
+        /// <param name="findMode">
+        /// The mode to find the string (first occurrence, all occurrences, etc.):
+        /// <list type="bullet">
+        /// <item>
+        /// <description>TextFindMode.First: Returns a list containing the Rect values for the first occurrence of the specified string.</description>
+        /// </item>
+        /// <item>
+        /// <description>TextFindMode.All: Returns a list containing the Rect values for all occurrences of the specified string.</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="results">The output list of TextRectInfo containing the Rect values for the specified string.</param>
+        /// <returns>True if the string was found and Rect information was retrieved; otherwise, false.</returns>
+        public static bool TryGetStringRects(this TextMeshPro text, string targetString, TextFindMode findMode,
+            out List<TextRectInfo> results)
+        {
+            return TryGetStringRects((TMP_Text)text, targetString, findMode, out results);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the Rect information for a specific string within a TextMeshProUGUI object.
+        /// </summary>
+        /// <param name="text">The target TextMeshProUGUI object.</param>
+        /// <param name="targetString">The string to find within the text.</param>
+        /// <param name="findMode">
+        /// The mode to find the string (first occurrence, all occurrences, etc.):
+        /// <list type="bullet">
+        /// <item>
+        /// <description>TextFindMode.First: Returns a list containing the Rect values for the first occurrence of the specified string.</description>
+        /// </item>
+        /// <item>
+        /// <description>TextFindMode.All: Returns a list containing the Rect values for all occurrences of the specified string.</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="results">The output list of TextRectInfo containing the Rect values for the specified string.</param>
+        /// <returns>True if the string was found and Rect information was retrieved; otherwise, false.</returns>
+        public static bool TryGetStringRects(this TextMeshProUGUI text, string targetString, TextFindMode findMode,
+            out List<TextRectInfo> results)
+        {
+            return TryGetStringRects((TMP_Text)text, targetString, findMode, out results);
+        }
+
+        /// <summary>
         /// Retrieves the Rect information for a specific string within a TMP_Text object.
         /// For TextMeshPro (3D), the Rect values are in the text object's local space.
         /// For TextMeshProUGUI (UI), the Rect values are in the canvas's local space.
@@ -133,6 +205,76 @@ namespace TextMeshProMax.Runtime.Helper
         }
 
 #if RUBY_TEXT_SUPPORT
+        /// <summary>
+        /// Attempts to retrieve the Rect information for a specific RubyString within a RubyTextMeshPro object.
+        /// </summary>
+        /// <param name="text">The target RubyTextMeshPro object.</param>
+        /// <param name="rubyString">The RubyString to find within the text.</param>
+        /// <param name="findMode">
+        /// The mode to find the string (first occurrence, all occurrences, etc.):
+        /// <list type="bullet">
+        /// <item>
+        /// <description>TextFindMode.First: Returns a list containing the Rect values for the first occurrence of the specified string.</description>
+        /// </item>
+        /// <item>
+        /// <description>TextFindMode.All: Returns a list containing the Rect values for all occurrences of the specified string.</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="results">The output list of TextRectInfo containing the Rect values for the specified string.</param>
+        /// <returns>True if the string was found and Rect information was retrieved; otherwise, false.</returns>
+        public static bool TryGetRubyStringRects(
+            this RubyTextMeshPro text,
+            RubyString rubyString,
+            TextFindMode findMode,
+            out List<TextRectInfo> results)
+        {
+            if (!rubyString.IsValid())
+            {
+                Debug.LogWarning("[RubyText] Invalid RubyString provided. Ensure all elements are valid.");
+                results = new List<TextRectInfo>();
+                return false;
+            }
+
+            return TryGetStringRectsInternal(new TMPTextWrapper(text), rubyString.ToPlainString(), findMode,
+                out results);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the Rect information for a specific RubyString within a RubyTextMeshProUGUI object.
+        /// </summary>
+        /// <param name="text">The target RubyTextMeshProUGUI object.</param>
+        /// <param name="rubyString">The RubyString to find within the text.</param>
+        /// <param name="findMode">
+        /// The mode to find the string (first occurrence, all occurrences, etc.):
+        /// <list type="bullet">
+        /// <item>
+        /// <description>TextFindMode.First: Returns a list containing the Rect values for the first occurrence of the specified string.</description>
+        /// </item>
+        /// <item>
+        /// <description>TextFindMode.All: Returns a list containing the Rect values for all occurrences of the specified string.</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="results">The output list of TextRectInfo containing the Rect values for the specified string.</param>
+        /// <returns>True if the string was found and Rect information was retrieved; otherwise, false.</returns>
+        public static bool TryGetRubyStringRects(
+            this RubyTextMeshProUGUI text,
+            RubyString rubyString,
+            TextFindMode findMode,
+            out List<TextRectInfo> results)
+        {
+            if (!rubyString.IsValid())
+            {
+                Debug.LogWarning("[RubyText] Invalid RubyString provided. Ensure all elements are valid.");
+                results = new List<TextRectInfo>();
+                return false;
+            }
+
+            return TryGetStringRectsInternal(new TMPTextWrapper(text), rubyString.ToPlainString(), findMode,
+                out results);
+        }
+
         /// <summary>
         /// Retrieves the Rect information for a complex RubyString consisting of multiple RubyElement entries.
         /// The returned Rect values are in the canvas's local space (relative to the canvas transform).
