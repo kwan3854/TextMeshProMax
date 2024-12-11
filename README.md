@@ -42,6 +42,9 @@ Details
    - ```https://github.com/kwan3854/TextMeshProMax.git```
    - If you need specific version, you can specify like this ```https://github.com/kwan3854/TextMeshProMax.git#v0.2.0```
 
+> [!TIP]
+> You can see inline comments in the code editor by enabling this option in the Unity Editor: `Edit` -> `Preferences` -> `External Tools` -> `Generate all .csproj files`
+> <img src="Documentation~/Images/xml_settings.png" alt="How to enable xml comments" width="700" />
 
 ## Features
 
