@@ -72,7 +72,7 @@ namespace TextMeshProMax.Editor
             { "CJK Radicals Supplement", (0x2E80, 0x2EFF) }
         };
 
-        [MenuItem("Tools/Font Atlas Generator")]
+        [MenuItem("Tools/CJK Font Atlas Generator")]
         public static void ShowWindow()
         {
             GetWindow<TextBakerProMax>("Font Atlas Generator");
