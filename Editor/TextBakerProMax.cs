@@ -18,7 +18,7 @@ namespace TextMeshProMax.Editor
         private bool _includeKorean;
 
         // CJK kanji options (multiple selection)
-        private bool _includeCjkUnified; // U+4E00~U+9FBF
+        private bool _includeCjkUnified; // 4E00~9FBF
         private bool _includeCjkExtensionB; // U+20000~U+2A6DF
         private bool _includeCjkCompatibility; // U+F900~U+FAFF
         private bool _includeCjkCompatibilitySupplement; // U+2F800~U+2FA1F
@@ -36,9 +36,13 @@ namespace TextMeshProMax.Editor
         private bool _includeHiragana; // U+3040~U+309F
         private bool _includeKatakana; // U+30A0~U+30FF
         private bool _includeKatakanaPhoneticExt; // U+31F0~U+31FF
+        
+        // Chinese options (multiple selection)
+        private bool _includeCommon3500;
+        private bool _includeCommon7000;
 
         // Output settings
-        private string _outputFolderPath = "Assets"; // 기본값: Assets 폴더
+        private string _outputFolderPath = "Assets";
         private string _outputFileName = "GeneratedFontAtlas.asset";
 
         // Debug output
@@ -48,6 +52,9 @@ namespace TextMeshProMax.Editor
         private const int AtlasSize = 2048;
         private const int CharacterSize = 100;
         private const float PaddingRatio = 0.1f;
+        private const string Korean2350Characters = "korean_2350";
+        private const string ChineseCommon3500Characters = "chinese_common_3500";
+        private const string ChineseCommon7000Characters = "chinese_common_7000";
 
         private readonly Dictionary<string, (int start, int end)> _predefinedRanges = new()
         {
@@ -63,6 +70,10 @@ namespace TextMeshProMax.Editor
             { "Hiragana", (0x3040, 0x309F) },
             { "Katakana", (0x30A0, 0x30FF) },
             { "KatakanaPhoneticExt", (0x31F0, 0x31FF) },
+            
+            // Chinese
+            { "Common 3500", (0x0000, 0x0000) }, // Use .txt file.
+            { "Common 7000", (0x0000, 0x0000) }, // Use .txt file.
 
             // CJK
             { "CJK Unified Ideographs", (0x4E00, 0x9FBF) },
@@ -108,6 +119,11 @@ namespace TextMeshProMax.Editor
                 DrawJapaneseOptions();
             }
 
+            if (_includeChinese)
+            {
+                DrawChineseOptions();
+            }
+
             GUILayout.Space(10);
             GUILayout.Label("Output Settings", EditorStyles.boldLabel);
 
@@ -144,6 +160,21 @@ namespace TextMeshProMax.Editor
             }
         }
 
+        private void DrawChineseOptions()
+        {
+            GUILayout.Space(10);
+            GUILayout.Label("Chinese Options (Multiple selection)", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Common 3500 Characters", GUILayout.Width(300));
+            _includeCommon3500 = EditorGUILayout.Toggle(_includeCommon3500);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Common 7000 Characters", GUILayout.Width(300));
+            _includeCommon7000 = EditorGUILayout.Toggle(_includeCommon7000);
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void DrawJapaneseOptions()
         {
             GUILayout.Space(10);
@@ -167,7 +198,7 @@ namespace TextMeshProMax.Editor
         private void DrawKoreanOptions()
         {
             GUILayout.Space(10);
-            GUILayout.Label("Korean Options (Multiple selection)", EditorStyles.boldLabel);
+            GUILayout.Label("Korean Options", EditorStyles.boldLabel);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("KS-1001 (B0A0-C8FF)", GUILayout.Width(300));
             _includeKs1001 = EditorGUILayout.Toggle(_includeKs1001);
@@ -250,7 +281,7 @@ namespace TextMeshProMax.Editor
             {
                 if (_includeKs1001)
                 {
-                    string korean2350Characters = LoadKorean2350Characters();
+                    string korean2350Characters = LoadCharactersFromTxt(Korean2350Characters);
                     foreach (char c in korean2350Characters)
                     {
                         codePoints.Add(c);
@@ -284,6 +315,31 @@ namespace TextMeshProMax.Editor
 
                 if (_includeKatakanaPhoneticExt)
                     AddCharactersFromRange(_predefinedRanges["KatakanaPhoneticExt"], codePoints);
+            }
+            
+            // Chinese
+            if (_includeChinese)
+            {
+                if (_includeCommon3500)
+                {
+                    string common3500Characters = LoadCharactersFromTxt(ChineseCommon3500Characters);
+                    foreach (char c in common3500Characters)
+                    {
+                        codePoints.Add(c);
+                    }
+                }
+                
+                if (_includeCommon7000)
+                {
+                    string common7000Characters = LoadCharactersFromTxt(ChineseCommon7000Characters);
+                    foreach (char c in common7000Characters)
+                    {
+                        codePoints.Add(c);
+                    }
+                }
+
+                if (_includeCjkUnified)
+                    AddCharactersFromRange(_predefinedRanges["Common 7000 Characters"], codePoints);
             }
 
             // CJK
@@ -343,6 +399,18 @@ namespace TextMeshProMax.Editor
             }
         }
 
+        private string LoadCharactersFromTxt(string common3500)
+        {
+            TextAsset txt = Resources.Load<TextAsset>(common3500);
+            if (txt == null)
+            {
+                Debug.LogError("korean2350.txt not found in Resources!");
+                return string.Empty;
+            }
+
+            return txt.text;
+        }
+
         private string UnicodeUintArrayToString(uint[] unicodeArray)
         {
             Debug.Assert(unicodeArray != null, "Unicode array is null!");
@@ -372,18 +440,6 @@ namespace TextMeshProMax.Editor
 
             Debug.Assert(tmpFontAsset != null, "Failed to create TMP_FontAsset!");
             return tmpFontAsset;
-        }
-
-        private string LoadKorean2350Characters()
-        {
-            TextAsset txt = Resources.Load<TextAsset>("korean2350");
-            if (txt == null)
-            {
-                Debug.LogError("korean2350.txt not found in Resources!");
-                return string.Empty;
-            }
-
-            return txt.text;
         }
     }
 }
