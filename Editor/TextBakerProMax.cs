@@ -163,15 +163,16 @@ namespace TextMeshProMax.Editor
         private void DrawChineseOptions()
         {
             GUILayout.Space(10);
-            GUILayout.Label("Chinese Options (Multiple selection)", EditorStyles.boldLabel);
+            GUILayout.Label("Chinese Options", EditorStyles.boldLabel);
+
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Common 3500 Characters", GUILayout.Width(300));
-            _includeCommon3500 = EditorGUILayout.Toggle(_includeCommon3500);
+            _includeCommon3500 = GUILayout.Toggle(_includeCommon3500, "Common 3500 Characters", "Radio");
+            if (_includeCommon3500) _includeCommon7000 = false;
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Common 7000 Characters", GUILayout.Width(300));
-            _includeCommon7000 = EditorGUILayout.Toggle(_includeCommon7000);
+            _includeCommon7000 = GUILayout.Toggle(_includeCommon7000, "Common 7000 Characters", "Radio");
+            if (_includeCommon7000) _includeCommon3500 = false;
             EditorGUILayout.EndHorizontal();
         }
 
