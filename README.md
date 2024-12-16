@@ -163,7 +163,6 @@ If the target string is `"Hello very long text that wraps!"`, the result will in
 ------
 
 ## CJK TextBakerProMax
-# CJK TextBakerProMax
 
 The **CJK TextBakerProMax** is a utility for creating customized TextMesh Pro font atlases optimized for CJK (Chinese, Japanese, Korean) characters. It generates **Dynamic Atlases**, ensuring text rendering flexibility without pre-baking static font assets.
 
