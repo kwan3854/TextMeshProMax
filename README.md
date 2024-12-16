@@ -285,7 +285,7 @@ var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
 The **CJK TextBakerProMax** is a utility for creating customized TextMesh Pro font atlases optimized for CJK (Chinese, Japanese, Korean) characters. It generates **Dynamic Atlases**, ensuring text rendering flexibility without pre-baking static font assets.
 
 `Tools` -> `CJK Font Atlas Generator`
-<img src="Documentation~/Images/CJK_baker.png" alt="CJK Baking Tool" width="700" />
+<img src="Documentation~/Images/CJK_baker_1.png" alt="CJK Baking Tool" width="700" />
 ### Why Use This Tool?
 
 By default, dynamic font atlases in TextMesh Pro allow you to use fonts without worrying about missing characters. Characters are added to the atlas dynamically as needed. However, there are specific cases where you might want to predefine a set of characters in the atlas to avoid runtime performance issues:
@@ -382,6 +382,21 @@ These options are shared across all three languages. They cover additional chara
   Use for projects involving Ainu language support or specialized Japanese typographic needs.
 
 ---
+
+#### **Chinese**
+1. **Common 3500 Characters**
+- **Description**:  
+  A curated set of 3,500 frequently used Chinese characters, covering most everyday text.  
+  [Learn more about Common 3500 Characters](https://github.com/wy-luke/Unity-TextMeshPro-Chinese-Characters-Set/blob/main/3500%E6%B1%89%E5%AD%97%2B%E7%AC%A6%E5%8F%B7%2B%E8%8B%B1%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86.txt)
+- **When to Enable**:  
+  Use for general-purpose Chinese text rendering.
+
+2. **Common 7000 Characters**
+- **Description**:  
+  An extended set of 7,000 Chinese characters, including less common or specialized characters.  
+  [Learn more about Common 7000 Characters](https://github.com/wy-luke/Unity-TextMeshPro-Chinese-Characters-Set/blob/main/7000%E6%B1%89%E5%AD%97%2B%E7%AC%A6%E5%8F%B7%2B%E8%8B%B1%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86.txt)
+- **When to Enable**:  
+  Use for projects requiring a broader range of Chinese characters, such as educational apps or specialized text processing.
 
 #### **CJK Options**
 1. **CJK Unified Ideographs (4E00-9FBF)**
