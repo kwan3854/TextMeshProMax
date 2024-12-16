@@ -9,38 +9,37 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 Details
 
-  - [How to Install](#how-to-install)
-  - [Features](#features)
-    - [1. GetStringRects](#1-getstringrects)
-      - [Parameters](#parameters)
-      - [Returns](#returns)
-    - [1.1 TryGetStringRects](#11-trygetstringrects)
-      - [Parameters](#parameters-1)
-      - [Returns](#returns-1)
-    - [2. GetRubyStringRects *(Requires RubyTextMeshPro)*](#2-getrubystringrects-requires-rubytextmeshpro)
-      - [Parameters](#parameters-2)
-      - [Returns](#returns-2)
-    - [2.1 TryGetRubyStringRects *(Requires RubyTextMeshPro)*](#21-trygetrubystringrects-requires-rubytextmeshpro)
-      - [Parameters](#parameters-3)
-      - [Returns](#returns-3)
-    - [3. Multi-Line Support](#3-multi-line-support)
-      - [Example:](#example)
-  - [CJK TextBakerProMax](#cjk-textbakerpromax)
-- [CJK TextBakerProMax](#cjk-textbakerpromax-1)
-    - [Why Use This Tool?](#why-use-this-tool)
-    - [Atlas Settings](#atlas-settings)
-      - [Why 100 Points and 10% Padding?](#why-100-points-and-10-padding)
-    - [Options](#options)
-      - [Language Options](#language-options)
-      - [CJK Options](#cjk-options)
-    - [Detailed Options and Usage](#detailed-options-and-usage)
-      - [**Korean**](#korean)
-      - [**Japanese**](#japanese)
-      - [**CJK Options**](#cjk-options-1)
-    - [RubyTextMeshPro Example](#rubytextmeshpro-example)
-  - [Contributing](#contributing)
-    - [Requesting New Features](#requesting-new-features)
-  - [License](#license)
+- [How to Install](#how-to-install)
+- [Features](#features)
+  - [1. GetStringRects](#1-getstringrects)
+    - [Parameters](#parameters)
+    - [Returns](#returns)
+  - [1.1 TryGetStringRects](#11-trygetstringrects)
+    - [Parameters](#parameters-1)
+    - [Returns](#returns-1)
+  - [2. GetRubyStringRects *(Requires RubyTextMeshPro)*](#2-getrubystringrects-requires-rubytextmeshpro)
+    - [Parameters](#parameters-2)
+    - [Returns](#returns-2)
+  - [2.1 TryGetRubyStringRects *(Requires RubyTextMeshPro)*](#21-trygetrubystringrects-requires-rubytextmeshpro)
+    - [Parameters](#parameters-3)
+    - [Returns](#returns-3)
+  - [3. Multi-Line Support](#3-multi-line-support)
+    - [Example:](#example)
+- [CJK TextBakerProMax](#cjk-textbakerpromax)
+  - [Why Use This Tool?](#why-use-this-tool)
+  - [Atlas Settings](#atlas-settings)
+    - [Why 100 Points and 10% Padding?](#why-100-points-and-10-padding)
+  - [Options](#options)
+    - [Language Options](#language-options)
+    - [CJK Options](#cjk-options)
+  - [Detailed Options and Usage](#detailed-options-and-usage)
+    - [**Korean**](#korean)
+    - [**Japanese**](#japanese)
+    - [**CJK Options**](#cjk-options-1)
+  - [RubyTextMeshPro Example](#rubytextmeshpro-example)
+- [Contributing](#contributing)
+  - [Requesting New Features](#requesting-new-features)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -183,7 +182,6 @@ var rects = text.GetStringRects(rubyString, TextFindMode.All);
 ------
 
 ## CJK TextBakerProMax
-# CJK TextBakerProMax
 
 The **CJK TextBakerProMax** is a utility for creating customized TextMesh Pro font atlases optimized for CJK (Chinese, Japanese, Korean) characters. It generates **Dynamic Atlases**, ensuring text rendering flexibility without pre-baking static font assets.
 
