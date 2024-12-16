@@ -285,7 +285,7 @@ var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
 The **CJK TextBakerProMax** is a utility for creating customized TextMesh Pro font atlases optimized for CJK (Chinese, Japanese, Korean) characters. It generates **Dynamic Atlases**, ensuring text rendering flexibility without pre-baking static font assets.
 
 `Tools` -> `CJK Font Atlas Generator`
-<img src="Documentation~/Images/CJK_baker_1.png" alt="CJK Baking Tool" width="700" />
+<img src="Documentation~/Images/CJK_baker_2.png" alt="CJK Baking Tool" width="700" />
 ### Why Use This Tool?
 
 By default, dynamic font atlases in TextMesh Pro allow you to use fonts without worrying about missing characters. Characters are added to the atlas dynamically as needed. However, there are specific cases where you might want to predefine a set of characters in the atlas to avoid runtime performance issues:
