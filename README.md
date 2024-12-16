@@ -170,6 +170,16 @@ If the target string is `"Hello very long text that wraps!"`, the result will in
 - One for `"Hello very long"`
 - One for `"text that wraps!"`
 
+```csharp
+// Works on any tmp: TMP_Text, TextMeshPro, TextMeshProUGUI
+TMP_Text text;
+TextMeshPro text;
+TextMeshProUGUI text;
+
+text.text = "Hello World\nHello Universe";
+var rects = text.GetStringRects(rubyString, TextFindMode.All);
+```
+
 ------
 
 ## CJK TextBakerProMax
@@ -311,20 +321,6 @@ These options are shared across all three languages. They cover additional chara
     Use for dictionary applications or tools involving radical-based text analysis.
 
 ---
-
-```
-
-```csharp
-// Works on any tmp: TMP_Text, TextMeshPro, TextMeshProUGUI
-TMP_Text text;
-TextMeshPro text;
-TextMeshProUGUI text;
-
-text.text = "Hello World\nHello Universe";
-var rects = text.GetStringRects(rubyString, TextFindMode.All);
-```
-
-
 
 ------
 
