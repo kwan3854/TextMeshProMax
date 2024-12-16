@@ -38,6 +38,7 @@ Details
   - [Detailed Options and Usage](#detailed-options-and-usage)
     - [**Korean**](#korean)
     - [**Japanese**](#japanese)
+    - [**Chinese**](#chinese)
     - [**CJK Options**](#cjk-options-1)
 - [Contributing](#contributing)
   - [Requesting New Features](#requesting-new-features)
