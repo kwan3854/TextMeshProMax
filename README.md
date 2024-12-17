@@ -243,7 +243,7 @@ If the target string is `"Hello very long text that wraps!"`, the result will in
 ### TMP Font Batch Changer
 
 The **TMP Font Batch Changer** automates the process of finding and replacing fonts across scenes and prefabs.
-> [!WARNING]
+> [!CAUTION]
 > Always back up your project before performing bulk operations. We do not guarantee compensation for any damage or loss caused by using this tool.
 
 <img src="Documentation~/Images/font_batch_changer.png" alt="CJK Baking Tool" width="700" />
@@ -273,6 +273,9 @@ The **CJK TextBakerProMax** is a utility for creating customized TextMesh Pro fo
 1. Open the tool:
   - `Tools` -> `TextMeshPro Max` -> `CJK Font Atlas Generator`
     <img src="Documentation~/Images/CJK_baker_2.png" alt="CJK Baking Tool" width="700" />
+> [!WARNING]
+> Disable the "Clear Dynamic Data On Build" option to retain character atlases in builds. This option is located in inspector of the generated font asset. (or in the TMP Settings for all fonts)
+
 #### Why Use This Tool?
 By default, dynamic font atlases in TextMesh Pro allow you to use fonts without worrying about missing characters. Characters are added to the atlas dynamically as needed. However, there are specific cases where you might want to predefine a set of characters in the atlas to avoid runtime performance issues:
 
@@ -405,9 +408,6 @@ These options are shared across all three languages. They cover additional chara
      [Learn more about CJK Radicals Supplement](https://en.wikipedia.org/wiki/CJK_Radicals_Supplement)
    - **When to Enable**:  
      Use for dictionary applications or tools involving radical-based text analysis.
-
-> [!WARNING]
-> Disable the "Clear Dynamic Data On Build" option to retain character atlases in builds.
 
 ---
 
