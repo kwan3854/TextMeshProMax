@@ -17,14 +17,14 @@ namespace TextMeshProMax.Editor
         private bool _includeJapanese;
         private bool _includeKorean;
 
-        // CJK kanji options (multiple selection)
+        // CJK kanji options
         private bool _includeCjkUnified; // 4E00~9FBF
         private bool _includeCjkExtensionB; // U+20000~U+2A6DF
         private bool _includeCjkCompatibility; // U+F900~U+FAFF
         private bool _includeCjkCompatibilitySupplement; // U+2F800~U+2FA1F
         private bool _includeCjkRadicals; // U+2E80~U+2EFF
 
-        // Korean options (multiple selection)
+        // Korean options
         private bool _includeKs1001; // KS-1001
         private bool _includeFullHangul; // Full Hangul
         private bool _includeHangulJamo; // Hangul Jamo
@@ -32,12 +32,12 @@ namespace TextMeshProMax.Editor
         private bool _includeHangulJamoExtendedA; // Hangul Jamo Extended-A
         private bool _includeHangulJamoExtendedB; // Hangul Jamo Extended-B
 
-        // Japanese options (multiple selection)
+        // Japanese options
         private bool _includeHiragana; // U+3040~U+309F
         private bool _includeKatakana; // U+30A0~U+30FF
         private bool _includeKatakanaPhoneticExt; // U+31F0~U+31FF
         
-        // Chinese options (multiple selection)
+        // Chinese options
         private bool _includeCommon3500;
         private bool _includeCommon7000;
 
@@ -137,7 +137,6 @@ namespace TextMeshProMax.Editor
                     // Absolute path to relative path
                     if (selectedPath.StartsWith(Application.dataPath))
                     {
-                        // eg: /Users/.../ProjectName/Assets -> Assets
                         selectedPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
                     }
 
@@ -317,7 +316,7 @@ namespace TextMeshProMax.Editor
                 if (_includeKatakanaPhoneticExt)
                     AddCharactersFromRange(_predefinedRanges["KatakanaPhoneticExt"], codePoints);
             }
-            
+
             // Chinese
             if (_includeChinese)
             {
@@ -329,7 +328,7 @@ namespace TextMeshProMax.Editor
                         codePoints.Add(c);
                     }
                 }
-                
+
                 if (_includeCommon7000)
                 {
                     string common7000Characters = LoadCharactersFromTxt(ChineseCommon7000Characters);
@@ -339,8 +338,7 @@ namespace TextMeshProMax.Editor
                     }
                 }
 
-                if (_includeCjkUnified)
-                    AddCharactersFromRange(_predefinedRanges["Common 7000 Characters"], codePoints);
+                // 여기서 CJK Unified 등도 추가 가능하지만, 이미 아래 CJK 섹션에 있음.
             }
 
             // CJK
@@ -365,10 +363,24 @@ namespace TextMeshProMax.Editor
             // int -> uint
             uint[] unicodeArray = codePoints.Select(cp => (uint)cp).ToArray();
 
-            TMP_FontAsset tmpFontAsset = CreateTMPFontAsset(_targetFont, AtlasSize, CharacterSize, PaddingRatio);
+            // Create font asset in dynamic mode with multi atlas support = true
+            int padding = Mathf.CeilToInt(CharacterSize * PaddingRatio);
+            TMP_FontAsset tmpFontAsset = TMP_FontAsset.CreateFontAsset(
+                _targetFont,
+                CharacterSize,
+                padding,
+                GlyphRenderMode.SDFAA,
+                AtlasSize,
+                AtlasSize,
+                AtlasPopulationMode.Dynamic, // Dynamic mode
+                true // multiAtlasSupport enabled
+            );
 
-            var success = tmpFontAsset.HasCharacters(UnicodeUintArrayToString(unicodeArray), out var missingCharacters,
-                false, true);
+            Debug.Assert(tmpFontAsset != null, "Failed to create TMP_FontAsset!");
+
+            // In dynamic mode, atlas and material are not automatically created at edit-time.
+            // Let's create an initial empty atlas and material to avoid missing references.
+            CreateInitialAtlasAndMaterial(tmpFontAsset);
 
             // Save the font asset
             string assetPath = Path.Combine(_outputFolderPath, _outputFileName);
@@ -379,33 +391,71 @@ namespace TextMeshProMax.Editor
             }
 
             AssetDatabase.CreateAsset(tmpFontAsset, assetPath);
+
+            // Add the created atlas texture and material as sub assets
+            var atlasTexture = tmpFontAsset.atlasTextures != null && tmpFontAsset.atlasTextures.Length > 0
+                ? tmpFontAsset.atlasTextures[0]
+                : null;
+            if (atlasTexture != null)
+                AssetDatabase.AddObjectToAsset(atlasTexture, tmpFontAsset);
+
+            if (tmpFontAsset.material != null)
+                AssetDatabase.AddObjectToAsset(tmpFontAsset.material, tmpFontAsset);
+
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            tmpFontAsset.ReadFontAssetDefinition();
+            
+            // Call HasCharacters with tryAddCharacter = true to populate as many chars as possible.
+            bool success = tmpFontAsset.HasCharacters(UnicodeUintArrayToString(unicodeArray), out uint[] missingCharacters, false, true);
+
             Debug.Log($"Font atlas generation completed! Saved at {assetPath}");
 
-            if (!success)
+            if (!success && missingCharacters != null && missingCharacters.Length > 0 && _outputMissingCharactersAsTxtFile)
             {
-                Debug.Assert(missingCharacters != null, "Missing characters array is null!");
-
-                if (_outputMissingCharactersAsTxtFile && missingCharacters.Length > 0)
-                {
-                    string missingCharactersFilePath =
-                        Path.Combine(_outputFolderPath, $"{_outputFileName}_MissingCharacters.txt");
-                    var missingCharactersString = UnicodeUintArrayToString(missingCharacters);
-                    File.WriteAllText(missingCharactersFilePath, missingCharactersString);
-                    Debug.Log($"Missing characters saved at {missingCharactersFilePath}");
-
-                    // Refresh the asset database to make the file visible in the project window
-                    AssetDatabase.Refresh();
-                }
+                string missingCharactersFilePath = Path.Combine(_outputFolderPath, $"{_outputFileName}_MissingCharacters.txt");
+                var missingCharactersString = UnicodeUintArrayToString(missingCharacters);
+                File.WriteAllText(missingCharactersFilePath, missingCharactersString);
+                Debug.Log($"Missing characters saved at {missingCharactersFilePath}");
+                AssetDatabase.Refresh();
             }
         }
 
-        private string LoadCharactersFromTxt(string common3500)
+        private void CreateInitialAtlasAndMaterial(TMP_FontAsset fontAsset)
         {
-            TextAsset txt = Resources.Load<TextAsset>(common3500);
+            // If atlasTextures is null or empty, create a minimal placeholder atlas.
+            if (fontAsset.atlasTextures == null || fontAsset.atlasTextures.Length == 0)
+            {
+                // Create a small empty texture (e.g. 64x64) as initial atlas
+                Texture2D placeholderAtlas = new Texture2D(64, 64, TextureFormat.Alpha8, false, true);
+                // Fill with transparent pixels
+                var fill = new Color32[64 * 64];
+                for (int i = 0; i < fill.Length; i++) fill[i] = new Color32(0,0,0,0);
+                placeholderAtlas.SetPixels32(fill);
+                placeholderAtlas.Apply(false, false);
+                placeholderAtlas.name = "Placeholder Atlas";
+
+                fontAsset.atlasTextures = new[] { placeholderAtlas };
+            }
+
+            // If material is null, create a default material referencing the atlas
+            if (fontAsset.material == null)
+            {
+                Shader sdfShader = Shader.Find("TextMeshPro/Distance Field");
+                Material mat = new Material(sdfShader);
+                mat.name = "Font Material";
+                mat.SetTexture(ShaderUtilities.ID_MainTex, fontAsset.atlasTextures[0]);
+                fontAsset.material = mat;
+            }
+        }
+
+        private string LoadCharactersFromTxt(string fileName)
+        {
+            TextAsset txt = Resources.Load<TextAsset>(fileName);
             if (txt == null)
             {
-                Debug.LogError("korean2350.txt not found in Resources!");
+                Debug.LogError($"{fileName}.txt not found in Resources!");
                 return string.Empty;
             }
 
@@ -425,22 +475,6 @@ namespace TextMeshProMax.Editor
             {
                 characters.Add(i);
             }
-        }
-
-        private TMP_FontAsset CreateTMPFontAsset(Font font, int atlasSize, int charSize, float paddingRatio)
-        {
-            int padding = Mathf.CeilToInt(charSize * paddingRatio);
-            TMP_FontAsset tmpFontAsset = TMP_FontAsset.CreateFontAsset(
-                font,
-                charSize,
-                padding,
-                GlyphRenderMode.SDFAA,
-                atlasSize,
-                atlasSize // multiAtlasSupport
-            );
-
-            Debug.Assert(tmpFontAsset != null, "Failed to create TMP_FontAsset!");
-            return tmpFontAsset;
         }
     }
 }
