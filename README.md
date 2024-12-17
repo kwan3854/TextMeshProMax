@@ -9,7 +9,37 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 Details
 
-
+- [How to Install](#how-to-install)
+- [Features](#features)
+  - [Helper Features](#helper-features)
+    - [1. GetStringRects](#1-getstringrects)
+      - [Code Example](#code-example)
+    - [1.1 TryGetStringRects](#11-trygetstringrects)
+      - [Code Example](#code-example-1)
+    - [2. GetRubyStringRects *(Requires RubyTextMeshPro)*](#2-getrubystringrects-requires-rubytextmeshpro)
+      - [Parameters](#parameters)
+      - [Returns](#returns)
+      - [Code Example](#code-example-2)
+    - [2.1 TryGetRubyStringRects *(Requires RubyTextMeshPro)*](#21-trygetrubystringrects-requires-rubytextmeshpro)
+    - [3. Multi-Line Support](#3-multi-line-support)
+      - [Example:](#example)
+- [Tools](#tools)
+  - [TMP Font Batch Changer](#tmp-font-batch-changer)
+    - [How to Use](#how-to-use)
+    - [Key Features](#key-features)
+  - [CJK Font Atlas Generator](#cjk-font-atlas-generator)
+    - [How to Use](#how-to-use-1)
+    - [Why Use This Tool?](#why-use-this-tool)
+    - [Language Options](#language-options)
+    - [CJK Options](#cjk-options)
+    - [Detailed Options and Usage](#detailed-options-and-usage)
+      - [**Korean**](#korean)
+      - [**Japanese**](#japanese)
+      - [**Chinese**](#chinese)
+    - [**CJK Options**](#cjk-options-1)
+- [Contributing](#contributing)
+  - [Requesting New Features](#requesting-new-features)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
