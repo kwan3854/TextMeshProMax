@@ -307,6 +307,8 @@ For most projects, especially where the text is predictable and limited in quant
 #### Why 100 Points and 10% Padding?
 > CJK characters are more complex than Latin characters. Through testing, it was found that font sizes below 100 points often result in visual artifacts, such as blurriness or inadequate detail for complex shapes like Chinese ideographs or Korean Hangul syllables. The 10% padding ensures proper spacing between characters and prevents artifacts at the edges.
 
+> [!WARNING]
+> If you are using the CJK Baker, it is crucial to manually disable the "Clear Dynamic Data On Build" setting in the Generation Settings. This ensures that all character data is retained during the build process. Failing to disable this option can result in missing characters in your final build.
 ---
 
 ### Options

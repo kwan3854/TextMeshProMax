@@ -43,7 +43,7 @@ namespace TextMeshProMax.Editor
 
         // Output settings
         private string _outputFolderPath = "Assets";
-        private string _outputFileName = "GeneratedFontAtlas.asset";
+        private string _outputFileName = "GeneratedFont.asset";
 
         // Debug output
         private bool _outputMissingCharactersAsTxtFile;
@@ -365,6 +365,7 @@ namespace TextMeshProMax.Editor
 
             // Create font asset in dynamic mode with multi atlas support = true
             int padding = Mathf.CeilToInt(CharacterSize * PaddingRatio);
+            
             TMP_FontAsset tmpFontAsset = TMP_FontAsset.CreateFontAsset(
                 _targetFont,
                 CharacterSize,
