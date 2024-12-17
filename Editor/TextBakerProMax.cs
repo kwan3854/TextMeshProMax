@@ -83,7 +83,7 @@ namespace TextMeshProMax.Editor
             { "CJK Radicals Supplement", (0x2E80, 0x2EFF) }
         };
 
-        [MenuItem("Tools/CJK Font Atlas Generator")]
+        [MenuItem("Tools/TextMeshPro Max/CJK Font Atlas Generator")]
         public static void ShowWindow()
         {
             GetWindow<TextBakerProMax>("Font Atlas Generator");
@@ -104,7 +104,7 @@ namespace TextMeshProMax.Editor
             // CJK
             if (_includeChinese || _includeJapanese || _includeKorean)
             {
-                DrawCJKOptions();
+                DrawCjkOptions();
             }
 
             // Korean
@@ -230,7 +230,7 @@ namespace TextMeshProMax.Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawCJKOptions()
+        private void DrawCjkOptions()
         {
             GUILayout.Space(10);
             GUILayout.Label("CJK Options", EditorStyles.boldLabel);

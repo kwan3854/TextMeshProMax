@@ -52,7 +52,7 @@ namespace TextMeshProMax.Editor
         private readonly Dictionary<object, bool> _foldoutStates = new();
         private Scene _initialActiveScene;
 
-        [MenuItem("Tools/TMP Font Batch Changer")]
+        [MenuItem("Tools/TextMeshPro Max/TMP Font Batch Changer")]
         public static void ShowWindow()
         {
             GetWindow<FontBatchChanger>("TMP Font Batch Changer").Show();
@@ -346,20 +346,20 @@ namespace TextMeshProMax.Editor
             var rect = EditorGUILayout.GetControlRect(GUILayout.Height(20));
             var bgColor = GetFontColor(f.TMPText.font);
 
-            // 전체 라인에 배경색 적용
+            // Alternate row background color (pastel)
             EditorGUI.DrawRect(rect, bgColor);
 
-            // 체크박스 표시
+            // Show checkbox
             Rect toggleRect = new Rect(rect.x, rect.y, 20, rect.height);
             f.Selected = EditorGUI.Toggle(toggleRect, f.Selected);
 
-            // 텍스트(검은색)
+            // Black text for contrast
             GUI.contentColor = Color.black;
             EditorGUI.LabelField(new Rect(rect.x + 25, rect.y, rect.width - 100, rect.height),
                 $"{f.RelativePath} (Font: {(f.TMPText.font ? f.TMPText.font.name : "None")})");
             GUI.contentColor = Color.white;
 
-            // Select 버튼
+            // Select button
             var selectButtonRect = new Rect(rect.x + rect.width - 60, rect.y, 60, rect.height);
             if (GUI.Button(selectButtonRect, "Select"))
             {
@@ -371,13 +371,13 @@ namespace TextMeshProMax.Editor
         {
             if (f.IsPrefab)
             {
-                // Prefab 오브젝트를 프로젝트에서 하이라이트
+                // Highlight prefab in project window
                 Selection.activeObject = f.GameObject;
                 EditorGUIUtility.PingObject(f.GameObject);
             }
             else
             {
-                // 씬 오브젝트를 씬에서 하이라이트
+                // Highlight object in scene view
                 Selection.activeGameObject = f.GameObject;
                 EditorGUIUtility.PingObject(f.GameObject);
             }
@@ -387,7 +387,7 @@ namespace TextMeshProMax.Editor
         {
             if (!_fontColors.ContainsKey(font))
             {
-                // Hue 기반 파스텔 톤 색상 생성
+                // Hue based on font index
                 float hue = (_colorIndex * 0.113f) % 1f;
                 float saturation = 0.2f;
                 float value = 0.95f;
