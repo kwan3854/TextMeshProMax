@@ -478,7 +478,7 @@ namespace TextMeshProMax.Editor
             EditorGUI.DrawRect(rect, bgColor);
 
             // Show checkbox
-            Rect toggleRect = new Rect(rect.x, rect.y, 20, rect.height);
+            Rect toggleRect = new Rect(rect.x, rect.y, rect.width, rect.height);
             f.Selected = EditorGUI.Toggle(toggleRect, f.Selected);
 
             // Determine prefix based on Group by Font state
@@ -524,7 +524,6 @@ namespace TextMeshProMax.Editor
 
         private void SelectObjectInProjectOrScene(FoundTMP f)
         {
-            // TODO: 씬 열고 닫기 기능 넣기
             if (f.Mother.IsSceneLoaded)
             {
                 // Highlight prefab in project window
