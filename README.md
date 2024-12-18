@@ -9,6 +9,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 Details
 
+- [Roadmap](#roadmap)
 - [How to Install](#how-to-install)
 - [Features](#features)
   - [Helper Features](#helper-features)
