@@ -28,22 +28,24 @@ namespace TextMeshProMax.Editor
         private readonly Dictionary<TMP_FontAsset, Color> _fontColors = new();
         private int _colorIndex;
 
+        private bool _searchFromPrefabs;
+        private bool _searchFromScenes;
+
         private class TMPTextInfo
         {
             public string Path;
             public string SceneName;
+            public bool IsCurrentScene => SceneName == SceneManager.GetActiveScene().name;
+            public bool IsSceneLoaded => SceneManager.GetSceneByPath(Path).isLoaded;
             public readonly List<FoundTMP> FoundTMPs = new();
         }
 
         private class FoundTMP
         {
-            public GameObject GameObject;
+            public TMPTextInfo Mother;
             public TMP_Text TMPText;
             public bool Selected = true;
             public string RelativePath;
-
-            private bool IsSceneObject => GameObject.scene.IsValid();
-            public bool IsPrefab => !IsSceneObject;
         }
 
         private readonly List<TMPTextInfo> _prefabResults = new();
@@ -105,39 +107,51 @@ namespace TextMeshProMax.Editor
             EditorGUILayout.Space(10);
             EditorGUILayout.BeginVertical(_boxStyle);
             EditorGUILayout.LabelField("Configuration", EditorStyles.boldLabel);
+
             _newFontAsset =
                 (TMP_FontAsset)EditorGUILayout.ObjectField("New Font Asset", _newFontAsset, typeof(TMP_FontAsset),
                     false);
 
             EditorGUILayout.Space(5);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Prefab Root Folder:", GUILayout.Width(120));
-            EditorGUILayout.LabelField(_prefabRootFolder, EditorStyles.textField);
-            if (GUILayout.Button("Browse", GUILayout.Width(60)))
-            {
-                string selectedPath =
-                    EditorUtility.OpenFolderPanel("Select Prefab Root Folder", Application.dataPath, "");
-                if (!string.IsNullOrEmpty(selectedPath))
-                {
-                    if (selectedPath.StartsWith(Application.dataPath))
-                    {
-                        selectedPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
-                    }
 
-                    _prefabRootFolder = selectedPath;
+            // Prefab and Scene Search Configuration
+            _searchFromPrefabs = EditorGUILayout.Toggle("Search from Prefabs", _searchFromPrefabs);
+            if (_searchFromPrefabs)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Prefab Root Folder:", GUILayout.Width(120));
+                EditorGUILayout.LabelField(_prefabRootFolder, EditorStyles.textField);
+                if (GUILayout.Button("Browse", GUILayout.Width(60)))
+                {
+                    string selectedPath =
+                        EditorUtility.OpenFolderPanel("Select Prefab Root Folder", Application.dataPath, "");
+                    if (!string.IsNullOrEmpty(selectedPath))
+                    {
+                        if (selectedPath.StartsWith(Application.dataPath))
+                        {
+                            selectedPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
+                        }
+
+                        _prefabRootFolder = selectedPath;
+                    }
                 }
+
+                EditorGUILayout.EndHorizontal();
             }
 
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(10);
-            EditorGUILayout.BeginVertical(_boxStyle);
-            EditorGUILayout.LabelField("Scene Selection", EditorStyles.boldLabel);
-            EditorGUILayout.Space(5);
-            foreach (var sp in _allScenePaths)
+            _searchFromScenes = EditorGUILayout.Toggle("Search from Scenes", _searchFromScenes);
+            if (_searchFromScenes)
             {
-                _sceneSelection[sp] = EditorGUILayout.Toggle(Path.GetFileNameWithoutExtension(sp), _sceneSelection[sp]);
+                EditorGUILayout.BeginVertical(_boxStyle);
+                EditorGUILayout.LabelField("Select Scenes to Search", EditorStyles.boldLabel);
+                EditorGUILayout.Space(5);
+                foreach (var sp in _allScenePaths)
+                {
+                    _sceneSelection[sp] =
+                        EditorGUILayout.Toggle(Path.GetFileNameWithoutExtension(sp), _sceneSelection[sp]);
+                }
+
+                EditorGUILayout.EndVertical();
             }
 
             EditorGUILayout.EndVertical();
@@ -195,6 +209,7 @@ namespace TextMeshProMax.Editor
             EditorGUILayout.EndScrollView();
         }
 
+
         private void SearchAll()
         {
             _prefabResults.Clear();
@@ -204,69 +219,94 @@ namespace TextMeshProMax.Editor
             _colorIndex = 0;
 
             // Prefab search
-            string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab", new[] { _prefabRootFolder });
-            foreach (string guid in prefabGuids)
+            if (_searchFromPrefabs)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (prefab != null)
+                string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab", new[] { _prefabRootFolder });
+                foreach (string guid in prefabGuids)
                 {
-                    var texts = prefab.GetComponentsInChildren<TMP_Text>(true);
-                    if (texts.Length > 0)
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    if (prefab != null)
                     {
-                        var info = new TMPTextInfo() { Path = path};
-                        foreach (var t in texts)
+                        var texts = prefab.GetComponentsInChildren<TMP_Text>(true);
+                        if (texts.Length > 0)
                         {
-                            var foundTMP = new FoundTMP
+                            var info = new TMPTextInfo() { Path = path };
+                            foreach (var t in texts)
                             {
-                                GameObject = t.gameObject,
-                                TMPText = t,
-                                Selected = true,
-                                RelativePath = GetGameObjectPath(t.gameObject, prefab.transform)
-                            };
-                            info.FoundTMPs.Add(foundTMP);
-                            AddToFontGroup(t, foundTMP);
-                        }
+                                var foundTMP = new FoundTMP
+                                {
+                                    Mother = info,
+                                    TMPText = t,
+                                    Selected = true,
+                                    RelativePath = GetGameObjectPath(t.gameObject, prefab.transform)
+                                };
+                                info.FoundTMPs.Add(foundTMP);
+                                AddToFontGroup(t, foundTMP);
+                            }
 
-                        _prefabResults.Add(info);
+                            _prefabResults.Add(info);
+                        }
                     }
                 }
             }
 
             // Scene search
-            var selectedScenes = _sceneSelection.Where(s => s.Value).Select(s => s.Key).ToList();
-            foreach (var scenePath in selectedScenes)
+            if (_searchFromScenes)
             {
-                var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
-                var texts = Resources.FindObjectsOfTypeAll<TMP_Text>()
-                    .Where(t => t.gameObject.scene == scene).ToArray();
-
-                if (texts.Length > 0)
+                var selectedScenes = _sceneSelection.Where(s => s.Value).Select(s => s.Key).ToList();
+                foreach (var scenePath in selectedScenes)
                 {
-                    var info = new TMPTextInfo()
-                    {
-                        Path = scenePath,
-                        SceneName = Path.GetFileNameWithoutExtension(scenePath)
-                    };
+                    var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+                    var texts = Resources.FindObjectsOfTypeAll<TMP_Text>().Where(t => t.gameObject.scene == scene)
+                        .ToArray();
 
-                    foreach (var t in texts)
+                    if (texts.Length > 0)
                     {
-                        var foundTMP = new FoundTMP
+                        var info = new TMPTextInfo()
                         {
-                            GameObject = t.gameObject,
-                            TMPText = t,
-                            Selected = true,
-                            RelativePath = GetSceneObjectPath(t.gameObject)
+                            Path = scenePath,
+                            SceneName = Path.GetFileNameWithoutExtension(scenePath)
                         };
-                        info.FoundTMPs.Add(foundTMP);
-                        AddToFontGroup(t, foundTMP);
+
+                        foreach (var t in texts)
+                        {
+                            var foundTMP = new FoundTMP
+                            {
+                                Mother = info,
+                                TMPText = t,
+                                Selected = true,
+                                RelativePath = GetSceneObjectPath(t.gameObject)
+                            };
+                            info.FoundTMPs.Add(foundTMP);
+                            AddToFontGroup(t, foundTMP);
+                        }
+
+                        _sceneResults.Add(info);
                     }
 
-                    _sceneResults.Add(info);
+                    // If it is not only loaded scene, close it
+                    if (!IsOnlyLoadedScene(scene))
+                    {
+                        EditorSceneManager.CloseScene(scene, true);
+                    }
                 }
-
-                EditorSceneManager.CloseScene(scene, true);
             }
+        }
+        
+        private bool IsOnlyLoadedScene(Scene scene)
+        {
+            var loadedSceneCount = 0;
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var s = SceneManager.GetSceneAt(i);
+                if (s.isLoaded)
+                {
+                    loadedSceneCount++;
+                }
+            }
+
+            return loadedSceneCount == 1;
         }
 
         private void DrawSceneAndPrefabResults()
@@ -277,7 +317,33 @@ namespace TextMeshProMax.Editor
                 EditorGUILayout.LabelField("Prefabs:", EditorStyles.boldLabel);
                 foreach (var p in _prefabResults)
                 {
-                    if (DrawFoldout(p, Path.GetFileNameWithoutExtension(p.Path)))
+                    EditorGUILayout.BeginHorizontal(); // Start horizontal layout for foldout + buttons
+
+                    // Draw foldout with the prefab name
+                    bool isExpanded = DrawFoldout(p, Path.GetFileNameWithoutExtension(p.Path));
+
+                    // Add "Select All" button within the same row as foldout
+                    if (GUILayout.Button("Select All", GUILayout.Width(100)))
+                    {
+                        foreach (var f in p.FoundTMPs)
+                        {
+                            f.Selected = true;
+                        }
+                    }
+
+                    // Add "Deselect All" button within the same row as foldout
+                    if (GUILayout.Button("Deselect All", GUILayout.Width(100)))
+                    {
+                        foreach (var f in p.FoundTMPs)
+                        {
+                            f.Selected = false;
+                        }
+                    }
+
+                    EditorGUILayout.EndHorizontal(); // End horizontal layout
+
+                    // Draw the foldout content if expanded
+                    if (isExpanded)
                     {
                         EditorGUI.indentLevel++;
                         foreach (var f in p.FoundTMPs)
@@ -298,12 +364,45 @@ namespace TextMeshProMax.Editor
                 EditorGUILayout.Space(5);
                 EditorGUILayout.BeginVertical(_boxStyle);
                 EditorGUILayout.LabelField("Scenes:", EditorStyles.boldLabel);
-                foreach (var s in _sceneResults)
+
+                foreach (var tmpTextInfo in _sceneResults)
                 {
-                    if (DrawFoldout(s, s.SceneName))
+                    EditorGUILayout.BeginHorizontal(); // Start horizontal layout for foldout + button
+
+                    // Draw foldout with the scene name
+                    bool isExpanded = DrawFoldout(tmpTextInfo, tmpTextInfo.SceneName);
+
+                    // Add "Open Scene" button within the same row as foldout
+                    if (GUILayout.Button("Open Scene", GUILayout.Width(100)))
+                    {
+                        EditorSceneManager.OpenScene(tmpTextInfo.Path, OpenSceneMode.Additive);
+                    }
+                    
+                    // Add "Select All" button within the same row as foldout
+                    if (GUILayout.Button("Select All", GUILayout.Width(100)))
+                    {
+                        foreach (var f in tmpTextInfo.FoundTMPs)
+                        {
+                            f.Selected = true;
+                        }
+                    }
+                    
+                    // Add "Deselect All" button within the same row as foldout
+                    if (GUILayout.Button("Deselect All", GUILayout.Width(100)))
+                    {
+                        foreach (var f in tmpTextInfo.FoundTMPs)
+                        {
+                            f.Selected = false;
+                        }
+                    }
+
+                    EditorGUILayout.EndHorizontal(); // End horizontal layout
+
+                    // Draw the foldout content if expanded
+                    if (isExpanded)
                     {
                         EditorGUI.indentLevel++;
-                        foreach (var f in s.FoundTMPs)
+                        foreach (var f in tmpTextInfo.FoundTMPs)
                         {
                             if (_filterFont != null && f.TMPText.font != _filterFont) continue;
                             DrawTMPTextEntry(f);
@@ -326,14 +425,39 @@ namespace TextMeshProMax.Editor
                 EditorGUILayout.BeginVertical(_boxStyle);
                 string fontName = kvp.Key ? kvp.Key.name : "(No Font)";
 
-                if (DrawFoldout(kvp.Key, fontName))
+                EditorGUILayout.BeginHorizontal(); // Start horizontal layout for foldout + buttons
+
+                // Draw foldout with the font name
+                bool isExpanded = DrawFoldout(kvp.Key, fontName);
+
+                // Add "Select All" button within the same row as foldout
+                if (GUILayout.Button("Select All", GUILayout.Width(100)))
+                {
+                    foreach (var f in kvp.Value)
+                    {
+                        f.Selected = true;
+                    }
+                }
+
+                // Add "Deselect All" button within the same row as foldout
+                if (GUILayout.Button("Deselect All", GUILayout.Width(100)))
+                {
+                    foreach (var f in kvp.Value)
+                    {
+                        f.Selected = false;
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal(); // End horizontal layout
+
+                // Draw the foldout content if expanded
+                if (isExpanded)
                 {
                     EditorGUI.indentLevel++;
                     foreach (var f in kvp.Value)
                     {
                         DrawTMPTextEntry(f);
                     }
-
                     EditorGUI.indentLevel--;
                 }
 
@@ -353,10 +477,24 @@ namespace TextMeshProMax.Editor
             Rect toggleRect = new Rect(rect.x, rect.y, 20, rect.height);
             f.Selected = EditorGUI.Toggle(toggleRect, f.Selected);
 
+            // Determine prefix based on Group by Font state
+            string prefix = "";
+            if (_showFontGrouping)
+            {
+                if (f.Mother.SceneName != null)
+                {
+                    prefix = $"[Scene: {f.Mother.SceneName}] ";
+                }
+                else
+                {
+                    prefix = "[Prefab] ";
+                }
+            }
+
             // Black text for contrast
             GUI.contentColor = Color.black;
             EditorGUI.LabelField(new Rect(rect.x + 25, rect.y, rect.width - 100, rect.height),
-                $"{f.RelativePath} (Font: {(f.TMPText.font ? f.TMPText.font.name : "None")})");
+                $"{prefix}{f.RelativePath} (Font: {(f.TMPText.font ? f.TMPText.font.name : "None")})");
             GUI.contentColor = Color.white;
 
             // Select button
@@ -365,21 +503,45 @@ namespace TextMeshProMax.Editor
             {
                 SelectObjectInProjectOrScene(f);
             }
+
+            if (_showFontGrouping)
+            {
+                // If it's not a scene object, don't show the Open Scene button
+                if (f.Mother.SceneName == null) return;
+                
+                // Add Open Scene button
+                if (GUI.Button(new Rect(rect.x + rect.width - 180, rect.y, 120, rect.height), "Open Scene"))
+                {
+                    var sceneToOpen = f.Mother.Path;
+                    EditorSceneManager.OpenScene(sceneToOpen, OpenSceneMode.Additive);
+                }
+            }
         }
 
         private void SelectObjectInProjectOrScene(FoundTMP f)
         {
-            if (f.IsPrefab)
+            // TODO: 씬 열고 닫기 기능 넣기
+            if (f.Mother.IsSceneLoaded)
             {
                 // Highlight prefab in project window
-                Selection.activeObject = f.GameObject;
-                EditorGUIUtility.PingObject(f.GameObject);
+
+                // Find the gameobject in the scene
+                if (f.TMPText == null)
+                {
+                    var sceneName = f.Mother.SceneName;
+
+                    // find object from the scene
+                    f.TMPText = Resources.FindObjectsOfTypeAll<TMP_Text>()
+                        .FirstOrDefault(tx => GetSceneObjectPath(tx.gameObject) == f.RelativePath);
+                }
+
+                Debug.Assert(f.TMPText != null, "f.TMPText != null");
+                Selection.activeObject = f.TMPText.gameObject;
+                EditorGUIUtility.PingObject(f.TMPText.gameObject);
             }
             else
             {
-                // Highlight object in scene view
-                Selection.activeGameObject = f.GameObject;
-                EditorGUIUtility.PingObject(f.GameObject);
+                Debug.LogWarning("Selecting objects in unopened scenes is not supported.");
             }
         }
 
@@ -502,7 +664,10 @@ namespace TextMeshProMax.Editor
                 }
                 finally
                 {
-                    EditorSceneManager.CloseScene(scene, true);
+                    if (!IsOnlyLoadedScene(scene))
+                    {
+                        EditorSceneManager.CloseScene(scene, true);
+                    }
                 }
             }
 
