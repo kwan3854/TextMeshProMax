@@ -478,7 +478,7 @@ namespace TextMeshProMax.Editor
             EditorGUI.DrawRect(rect, bgColor);
 
             // Show checkbox
-            Rect toggleRect = new Rect(rect.x, rect.y, rect.width, rect.height);
+            Rect toggleRect = new Rect(rect.x, rect.y, rect.width - 60 - 120, rect.height);
             f.Selected = EditorGUI.Toggle(toggleRect, f.Selected);
 
             // Determine prefix based on Group by Font state
