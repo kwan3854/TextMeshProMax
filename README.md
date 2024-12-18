@@ -246,7 +246,8 @@ The **TMP Font Batch Changer** automates the process of finding and replacing fo
 > [!CAUTION]
 > Always back up your project before performing bulk operations. We do not guarantee compensation for any damage or loss caused by using this tool.
 
-<img src="Documentation~/Images/font_batch_changer.png" alt="CJK Baking Tool" width="700" />
+<img src="Documentation~/Images/font_batch_changer_1.png" alt="CJK Baking Tool" width="700" />
+<img src="Documentation~/Images/font_batch_changer_2.png" alt="CJK Baking Tool" width="700" />
 
 #### How to Use
 1. Open the tool:
@@ -257,6 +258,9 @@ The **TMP Font Batch Changer** automates the process of finding and replacing fo
    - **Scene Selection**: Select scenes to scan.
 3. Click **Search TMP_Text Components**.
 4. Review and apply changes.
+
+> [!TIP]
+> You can ping the TMP_Text component in the scene/project by clicking the **Select** button.
 
 #### Key Features
 - **Group by Font**: Organize TMP_Text components by their current fonts.
