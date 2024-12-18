@@ -118,8 +118,11 @@ namespace TextMeshProMax.Editor
             _searchFromPrefabs = EditorGUILayout.Toggle("Search from Prefabs", _searchFromPrefabs);
             if (_searchFromPrefabs)
             {
+                // Box for Search from Prefabs options
+                EditorGUILayout.BeginVertical(_boxStyle);
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Prefab Root Folder:", GUILayout.Width(120));
+                
+                EditorGUILayout.LabelField("Prefab Root Folder:", GUILayout.Width(150));
                 EditorGUILayout.LabelField(_prefabRootFolder, EditorStyles.textField);
                 if (GUILayout.Button("Browse", GUILayout.Width(60)))
                 {
@@ -135,8 +138,9 @@ namespace TextMeshProMax.Editor
                         _prefabRootFolder = selectedPath;
                     }
                 }
-
+                
                 EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
             }
 
             _searchFromScenes = EditorGUILayout.Toggle("Search from Scenes", _searchFromScenes);
