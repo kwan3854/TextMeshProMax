@@ -43,6 +43,9 @@ Details
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Roadmap
+You can find the roadmap for this project in the [Roadmap](https://github.com/users/kwan3854/projects/1/views/2) section.
+
 ## How to Install
 
 1. Open package manager from **Unity Editor**
