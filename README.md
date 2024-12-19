@@ -1,5 +1,5 @@
 # **TextMeshProMax**
-
+<img src="Documentation~/Images/logo.png" alt="How to enable xml comments" width="700" />
 **TextMeshProMax** is a utility library that extends `TextMesh Pro`, making it easier to perform advanced text-related tasks in Unity projects. It supports standard TextMesh Pro functionalities and optional RubyTextMeshPro integration.
 
 ------
@@ -65,6 +65,9 @@ You can find the roadmap for this project in the [Roadmap](https://github.com/us
 
 #### 1. GetStringRects
 Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` object.
+
+<img src="Documentation~/Images/GetStringRects.png" alt="How to enable xml comments" width="700" />
+<img src="Documentation~/Images/GetStringRectsResult.png" alt="How to enable xml comments" width="700" />
 
 - **Parameters**:
   - `text` (`TMP_Text`): The target TextMesh Pro object.
