@@ -1,5 +1,6 @@
 # **TextMeshProMax**
 <img src="Documentation~/Images/logo.png" alt="How to enable xml comments" width="700" />
+
 **TextMeshProMax** is a utility library that extends `TextMesh Pro`, making it easier to perform advanced text-related tasks in Unity projects. It supports standard TextMesh Pro functionalities and optional RubyTextMeshPro integration.
 
 ------
