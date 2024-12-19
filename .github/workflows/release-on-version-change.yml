@@ -1,0 +1,41 @@
+name: Release on Version Change
+
+on:
+  push:
+    paths:
+      - package.json
+    branches:
+      - main  # occurs on push to main branch
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Node.js setup
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Get version from package.json
+      - name: Get version from package.json
+        id: get_version
+        run: |
+          echo "::set-output name=version::$(jq -r .version package.json)"
+
+      # Generate Release Notes
+      - name: Create GitHub Release with Auto-Generated Notes
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ steps.get_version.outputs.version }}
+          name: "v${{ steps.get_version.outputs.version }}"
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
