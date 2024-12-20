@@ -19,7 +19,8 @@ namespace TextMeshProMax.Editor
         private TMP_FontAsset _filterFont;
 
         private bool _showFontGrouping;
-        private Vector2 _scrollPosition;
+        private Vector2 _windowScrollPosition;
+        private Vector2 _sceneScrollPosition;
 
         private GUIStyle _boxStyle;
         private GUIStyle _headerStyle;
@@ -99,7 +100,12 @@ namespace TextMeshProMax.Editor
 
         private void OnGUI()
         {
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+            if (_boxStyle == null)
+            {
+                InitializeStyles();
+            }
+            
+            _windowScrollPosition = EditorGUILayout.BeginScrollView(_windowScrollPosition);
 
             EditorGUILayout.BeginVertical(_boxStyle);
             EditorGUILayout.LabelField("TMP Font Batch Changer", _headerStyle);
@@ -146,13 +152,34 @@ namespace TextMeshProMax.Editor
             _searchFromScenes = EditorGUILayout.Toggle("Search from Scenes", _searchFromScenes);
             if (_searchFromScenes)
             {
-                EditorGUILayout.BeginVertical(_boxStyle);
+                // Configuration 박스를 감싸는 상위 레이아웃이나 해당 영역을 ExpandHeight(true)로 설정
+                // 예: EditorGUILayout.BeginVertical(_boxStyle, GUILayout.ExpandHeight(true));
+
+                EditorGUILayout.BeginVertical(_boxStyle, GUILayout.ExpandHeight(true));
                 EditorGUILayout.LabelField("Select Scenes to Search", EditorStyles.boldLabel);
                 EditorGUILayout.Space(5);
-                foreach (var sp in _allScenePaths)
+
+                // ScrollViewScope에도 ExpandHeight(true)를 적용
+                using (var scrollView = new EditorGUILayout.ScrollViewScope(_sceneScrollPosition, GUILayout.ExpandHeight(true)))
                 {
-                    _sceneSelection[sp] =
-                        EditorGUILayout.Toggle(Path.GetFileNameWithoutExtension(sp), _sceneSelection[sp]);
+                    _sceneScrollPosition = scrollView.scrollPosition;
+
+                    foreach (var sp in _allScenePaths)
+                    {
+                        EditorGUILayout.BeginVertical(_boxStyle);
+                        EditorGUILayout.BeginHorizontal();
+
+                        _sceneSelection[sp] = EditorGUILayout.Toggle(_sceneSelection[sp], GUILayout.Width(20));
+
+                        GUIStyle sceneNameStyle = new GUIStyle(EditorStyles.label)
+                        {
+                            wordWrap = true
+                        };
+                        EditorGUILayout.LabelField(Path.GetFileNameWithoutExtension(sp), sceneNameStyle);
+
+                        EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.EndVertical();
+                    }
                 }
 
                 EditorGUILayout.EndVertical();
