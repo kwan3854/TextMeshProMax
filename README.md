@@ -12,6 +12,11 @@ Details
 
 - [Roadmap](#roadmap)
 - [How to Install](#how-to-install)
+  - [1. Install via OpenUPM](#1-install-via-openupm)
+    - [1.1. Install via Package Manager](#11-install-via-package-manager)
+    - [1.2. Alternatively, merge the snippet to Packages/manifest.json](#12-alternatively-merge-the-snippet-to-packagesmanifestjson)
+    - [1.3. Install via command-line interface](#13-install-via-command-line-interface)
+  - [2. Install via Git URL](#2-install-via-git-url)
 - [Features](#features)
   - [Helper Features](#helper-features)
     - [1. GetStringRects](#1-getstringrects)
