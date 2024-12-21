@@ -38,7 +38,7 @@ Details
       - [**Korean**](#korean)
       - [**Japanese**](#japanese)
       - [**Chinese**](#chinese)
-    - [**CJK Options**](#cjk-options-1)
+    - [**CJK Options**](#cjk-options-1)[README.md](../../../TwentyFiveSlicer/README.md)
 - [Contributing](#contributing)
   - [Requesting New Features](#requesting-new-features)
 - [License](#license)
@@ -62,8 +62,8 @@ Please follow the instrustions:
 - open Window/Package Manager 
 - click `+`
 - select `Add package by name...` or `Add package from git URL...`
-- paste `com.kwanjoong.twentyfiveslicer` into name 
-- paste version (e.g.`1.0.0`) into version 
+- paste `com.kwanjoong.textmeshpromax` into name 
+- paste version (e.g.`0.5.2`) into version 
 - click `Add`
 ---
 #### 1.2. Alternatively, merge the snippet to Packages/manifest.json
@@ -77,13 +77,13 @@ Please follow the instrustions:
     }
   ],
   "dependencies": {
-    "com.kwanjoong.twentyfiveslicer": "1.0.0"
+    "com.kwanjoong.textmeshpromax": "0.5.2" // Please use the latest version
   }
 }
 ```
 #### 1.3. Install via command-line interface
 ```sh
-openupm add com.kwanjoong.twentyfiveslicer
+openupm add com.kwanjoong.textmeshpromax
 ```
 
 ### 2. Install via Git URL
