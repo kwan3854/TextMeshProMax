@@ -1,4 +1,6 @@
 # **TextMeshProMax**
+[![openupm](https://img.shields.io/npm/v/com.kwanjoong.textmeshpromax?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.kwanjoong.textmeshpromax/)
+![Auto-Release](https://github.com/kwan3854/TextMeshProMax/actions/workflows/release-on-version-change.yml/badge.svg)
 <img src="Documentation~/Images/logo.png" alt="How to enable xml comments" width="700" />
 
 **TextMeshProMax** is a utility library that extends `TextMesh Pro`, making it easier to perform advanced text-related tasks in Unity projects. It supports standard TextMesh Pro functionalities and optional RubyTextMeshPro integration.
