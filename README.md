@@ -50,6 +50,43 @@ You can find the roadmap for this project in the [Roadmap](https://github.com/us
 
 ## How to Install
 
+### 1. Install via OpenUPM
+
+#### 1.1. Install via Package Manager
+Please follow the instrustions:
+- open Edit/Project Settings/Package Manager 
+- add a new Scoped Registry (or edit the existing OpenUPM entry)
+  - Name: `package.openupm.com`
+  - URL: `https://package.openupm.com`
+- click `Save` or `Apply`
+- open Window/Package Manager 
+- click `+`
+- select `Add package by name...` or `Add package from git URL...`
+- paste `com.kwanjoong.twentyfiveslicer` into name 
+- paste version (e.g.`1.0.0`) into version 
+- click `Add`
+---
+#### 1.2. Alternatively, merge the snippet to Packages/manifest.json
+```json
+{
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": []
+    }
+  ],
+  "dependencies": {
+    "com.kwanjoong.twentyfiveslicer": "1.0.0"
+  }
+}
+```
+#### 1.3. Install via command-line interface
+```sh
+openupm add com.kwanjoong.twentyfiveslicer
+```
+
+### 2. Install via Git URL
 1. Open package manager from **Unity Editor**
   - `Window` -> `Package Manager` -> `+` button on top left -> `Add package from git URL`
 2. Copy and paste this url
